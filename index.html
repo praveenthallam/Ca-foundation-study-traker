@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CA Focus</title>
+<style>
+:root{--bg:#f4f7fb;--card:#fff;--ink:#162033;--muted:#718096;--blue:#3157d5;--blue2:#eaf0ff;--green:#0f9d72;--orange:#e99024;--line:#e7ebf2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--ink)}button,input{font:inherit}
+.app{width:430px;max-width:100%;min-height:100vh;margin:auto;background:var(--bg);padding-bottom:76px}
+.top{padding:22px 18px 16px;background:linear-gradient(145deg,#172554,#3157d5);color:#fff;border-radius:0 0 28px 28px}
+.brand{font-size:12px;opacity:.78;letter-spacing:1px;font-weight:700}h1{font-size:27px;margin:5px 0 2px}.hello{font-size:12px;opacity:.8}
+.hero{margin-top:18px;background:#ffffff16;border:1px solid #ffffff25;border-radius:20px;padding:15px;display:flex;gap:14px;align-items:center}
+.ring{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#fff var(--p),#ffffff2b 0);position:relative;flex:none}
+.ring:after{content:"";position:absolute;width:68px;height:68px;border-radius:50%;background:#2145b3}
+.ring b{position:relative;z-index:1;font-size:21px}.heroText b{font-size:18px}.heroText div{font-size:12px;opacity:.8;margin-top:5px}
+.content{padding:17px}.section{display:flex;justify-content:space-between;align-items:end;margin:17px 0 10px}.section h2{margin:0;font-size:18px}.section span{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.stat{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:14px;box-shadow:0 4px 15px #1d29420a}.stat .big{font-size:22px;font-weight:800;margin-top:4px}.stat small{color:var(--muted);font-size:11px}
+.target{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px}.targetrow{display:flex;justify-content:space-between;align-items:center}.target input{width:62px;border:1px solid #d8deea;border-radius:9px;padding:7px;text-align:center}
+.bar{height:9px;background:#e8edf5;border-radius:99px;overflow:hidden;margin-top:11px}.fill{height:100%;background:var(--blue);border-radius:99px}
+.subject{background:#fff;border:1px solid var(--line);border-radius:18px;margin:10px 0;overflow:hidden}.shead{padding:14px}.srow{display:flex;justify-content:space-between;align-items:center}.sname{font-weight:750;font-size:14px}.pct{font-weight:800;font-size:14px;color:var(--blue)}.meta{font-size:11px;color:var(--muted);margin-top:5px}
+.chapters{display:none;border-top:1px solid var(--line)}.open .chapters{display:block}.chapter{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid #f0f2f6}.chapter:last-child{border-bottom:0}.chapter input{width:19px;height:19px;accent-color:var(--blue);margin-top:1px}.cname{font-size:12px;font-weight:650;line-height:1.35}.status{font-size:10px;color:var(--muted);margin-top:3px}.done .cname{text-decoration:line-through;color:#8a94a6}
+.btn{border:0;border-radius:10px;padding:8px 11px;font-size:11px;font-weight:750;background:var(--blue2);color:var(--blue)}.primary{background:var(--blue);color:#fff}
+.actions{display:flex;gap:8px;margin-top:11px}.actions button{flex:1}
+.countdown{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px}.countdown .days{font-size:27px;font-weight:850}.countdown small{color:var(--muted)}.countdown input{width:100%;margin-top:9px;border:1px solid #d8deea;border-radius:10px;padding:9px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:430px;max-width:100%;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 3px calc(9px + env(safe-area-inset-bottom));z-index:5}.nav button{border:0;background:none;color:#7b8798;font-size:10px}.nav button.active{color:var(--blue);font-weight:800}.icon{display:block;font-size:19px;margin-bottom:2px}
+.hidden{display:none!important}.empty{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+</style></head>
+<body><div class="app">
+<header class="top">
+<div class="brand">CA FOUNDATION • FOCUS</div><h1>Study Dashboard</h1><div class="hello">Your progress, targets & revisions in one place.</div>
+<div class="hero"><div class="ring" id="ring" style="--p:0%"><b id="overallPct">0%</b></div><div class="heroText"><b id="doneText">0 / 46 chapters</b><div id="remainText">46 chapters remaining</div><div id="weekText">Keep building your streak.</div></div></div>
+</header>
+<main class="content">
+<section class="section"><div><h2>Overview</h2><span>Live progress</span></div></section>
+<div class="grid">
+<div class="stat"><small>Completed</small><div class="big" id="doneStat">0</div></div>
+<div class="stat"><small>Remaining</small><div class="big" id="remainStat">46</div></div>
+<div class="stat"><small>Study hours</small><div class="big" id="hoursStat">0h</div></div>
+<div class="stat"><small>Revisions done</small><div class="big" id="revStat">0</div></div>
+</div>
+
+<section class="section"><div><h2>Today's Target 🎯</h2><span id="todayLabel"></span></div></section>
+<div class="target"><div class="targetrow"><div><b id="targetProgress">0 / 4 hours</b><div class="meta">Log your study hours below</div></div><input id="targetInput" type="number" min="0" step=".5" value="4" aria-label="Daily target hours"></div><div class="bar"><div class="fill" id="targetBar" style="width:0%"></div></div>
+<div class="actions"><button class="btn" onclick="addHours(0.5)">+ 30 min</button><button class="btn primary" onclick="addHours(1)">+ 1 hour</button><button class="btn" onclick="resetHours()">Reset</button></div></div>
+
+<section class="section"><div><h2>Exam Countdown ⏳</h2><span>Set your exam date</span></div></section>
+<div class="countdown"><div class="days" id="countdown">Not set</div><small id="countdownSub">Choose your CA Foundation exam date.</small><input id="examDate" type="date"></div>
+
+<section class="section"><div><h2>Subjects</h2><span>Tap Chapters to expand</span></div></section>
+<div id="subjects"></div>
+</main>
+<nav class="nav"><button class="active"><span class="icon">⌂</span>Home</button><button onclick="scrollToSubjects()"><span class="icon">▦</span>Subjects</button><button onclick="alert('Progress is shown live on the dashboard.')"><span class="icon">◔</span>Progress</button><button onclick="resetAll()"><span class="icon">⚙</span>Reset</button></nav>
+</div>
+<script>
+const subjects={"Accounting": ["Theoretical Framework", "Accounting Process", "Bank Reconciliation Statement", "Inventories", "Depreciation and Amortisation", "Bills of Exchange and Promissory Notes", "Preparation of Final Accounts of Sole Proprietors", "Financial Statements of Not-for-Profit Organizations", "Accounts from Incomplete Records", "Partnership and LLP Accounts", "Company Accounts"], "Business Laws": ["Indian Regulatory Framework", "Indian Contract Act", "Sale of Goods Act", "Limited Liability Partnership Act", "Partnership", "Companies Act", "Negotiable Instrument Act"], "Quantitative Aptitude": ["Ratio, Proportion, Indices & Logarithm", "Equations", "Linear Inequalities", "Mathematics of Finance", "Permutations & Combinations", "Sequences & Series", "Set, Relation, Function & Limits", "Calculus", "Number Series, Coding Decoding, Odd One Out", "Direction Sense Test", "Seating Arrangements", "Blood Relations", "Statistical Description of Data & Sampling", "Central Tendency & Dispersion", "Probability", "Theoretical Distributions", "Correlation & Regression", "Index Numbers"], "Business Economics": ["Introduction to Business Economics", "Theory of Demand and Supply", "Theory of Production and Cost", "Price Determination in Different Markets", "Determination of National Income", "Business Cycles", "Public Finance", "Money Market", "International Trade", "Indian Economy"]};
+const total=Object.values(subjects).reduce((a,x)=>a+x.length,0);
+let state=JSON.parse(localStorage.getItem("cafocus_state")||"{}");
+state.completed=state.completed||{};state.hours=Number(state.hours||0);state.target=Number(state.target||4);state.examDate=state.examDate||"";
+document.getElementById("targetInput").value=state.target;
+document.getElementById("examDate").value=state.examDate;
+document.getElementById("targetInput").onchange=e=>{state.target=Math.max(0,Number(e.target.value)||0);save();renderStats()};
+document.getElementById("examDate").onchange=e=>{state.examDate=e.target.value;save();renderCountdown()};
+function save(){localStorage.setItem("cafocus_state",JSON.stringify(state))}
+function key(s,i){return s+"_"+i}
+function completedCount(){return Object.values(state.completed).filter(Boolean).length}
+function renderSubjects(){
+ const box=document.getElementById("subjects");box.innerHTML="";
+ Object.entries(subjects).forEach(([s,chs])=>{
+  const d=chs.filter((_,i)=>state.completed[key(s,i)]).length,p=Math.round(d/chs.length*100);
+  const card=document.createElement("div");card.className="subject";
+  card.innerHTML=`<div class="shead"><div class="srow"><div><div class="sname">${s}</div><div class="meta">${d} completed • ${chs.length-d} remaining</div></div><div><span class="pct">${p}%</span> <button class="btn toggle">Chapters</button></div></div><div class="bar"><div class="fill" style="width:${p}%"></div></div></div><div class="chapters"></div>`;
+  const list=card.querySelector(".chapters");
+  chs.forEach((name,i)=>{
+   const done=!!state.completed[key(s,i)],row=document.createElement("div");row.className="chapter"+(done?" done":"");
+   row.innerHTML=`<input type="checkbox" ${done?"checked":""}><div><div class="cname">Chapter ${i+1}: ${name}</div><div class="status">${done?"✓ Completed":"Not completed"}</div></div>`;
+   row.querySelector("input").onchange=e=>{state.completed[key(s,i)]=e.target.checked;save();renderSubjects();renderStats()};
+   list.appendChild(row);
+  });
+  card.querySelector(".toggle").onclick=()=>card.classList.toggle("open");
+  box.appendChild(card);
+ });
+}
+function renderStats(){
+ const d=completedCount(),p=Math.round(d/total*100),r=total-d;
+ document.getElementById("overallPct").textContent=p+"%";document.getElementById("ring").style.setProperty("--p",p+"%");
+ document.getElementById("doneText").textContent=d+" / "+total+" chapters";document.getElementById("remainText").textContent=r+" chapters remaining";
+ document.getElementById("doneStat").textContent=d;document.getElementById("remainStat").textContent=r;
+ document.getElementById("hoursStat").textContent=state.hours+"h";
+ document.getElementById("targetProgress").textContent=state.hours+" / "+state.target+" hours";
+ document.getElementById("targetBar").style.width=(state.target?Math.min(100,state.hours/state.target*100):0)+"%";
+ document.getElementById("revStat").textContent=Math.floor(d/3);
+ document.getElementById("todayLabel").textContent=new Date().toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+ document.getElementById("weekText").textContent=p>=75?"Excellent progress!":"Every completed chapter counts.";
+}
+function addHours(x){state.hours=Math.round((state.hours+x)*10)/10;save();renderStats()}
+function resetHours(){state.hours=0;save();renderStats()}
+function renderCountdown(){
+ if(!state.examDate){document.getElementById("countdown").textContent="Not set";document.getElementById("countdownSub").textContent="Choose your CA Foundation exam date.";return}
+ const target=new Date(state.examDate+"T00:00:00"),now=new Date();const diff=Math.ceil((target-now)/86400000);
+ document.getElementById("countdown").textContent=diff>=0?diff+" days":"Exam date passed";
+ document.getElementById("countdownSub").textContent=new Date(state.examDate+"T00:00:00").toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
+}
+function scrollToSubjects(){document.getElementById("subjects").scrollIntoView({behavior:"smooth"})}
+function resetAll(){if(confirm("Reset all chapter progress, hours and exam date?")){state={completed:{},hours:0,target:4,examDate:""};save();document.getElementById("targetInput").value=4;document.getElementById("examDate").value="";renderSubjects();renderStats();renderCountdown()}}
+renderSubjects();renderStats();renderCountdown();
+</script></body></html>
