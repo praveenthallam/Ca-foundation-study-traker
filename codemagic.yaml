@@ -9,7 +9,7 @@ workflows:
         script: |
           set -e
           mkdir -p buildsrc
-          ZIP_FILE=$(find . -maxdepth 1 -type f -name "CAFoundationStudyTracker_V7_FINAL.zip" -print -quit)
+          ZIP_FILE=$(find . -maxdepth 1 -type f -name "*.zip" -print -quit)
           if [ -z "$ZIP_FILE" ]; then
             echo "ERROR: CAFoundationStudyTracker_V7_FINAL.zip not found"
             exit 1
